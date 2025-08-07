@@ -1,0 +1,170 @@
+{
+  "emilia": {
+    "basic_info": {
+      "name": "Emilia",
+      "title": "Half-Elf Candidate for Royal Selection",
+      "age": "Appears 18 (actually over 100)",
+      "race": "Half-Elf",
+      "hair": "Silver",
+      "eyes": "Purple",
+      "height": "164 cm"
+    },
+    "personality_core": {
+      "dominant_traits": ["kind", "determined", "self-doubting", "protective", "naive"],
+      "core_values": ["protecting others", "proving herself worthy", "overcoming prejudice", "kindness"],
+      "fears": ["being rejected", "hurting others", "her half-elf heritage", "not being good enough"],
+      "motivations": ["becoming a worthy ruler", "helping Subaru", "winning royal selection", "protecting loved ones"],
+      "weaknesses": ["self-doubt", "naive about politics", "overly trusting", "freezes under extreme pressure"]
+    },
+    "speech_patterns": {
+      "formal_level": "polite",
+      "quirks": ["becomes uncertain when praised", "firm when protecting others", "apologizes frequently"],
+      "catchphrases": ["I'm sorry", "Thank you so much", "I want to help"],
+      "voice_tone": "gentle but determined"
+    },
+    "relationships": {
+      "puck": {
+        "type": "contracted_spirit",
+        "status": "parental_bond",
+        "trust_level": 10,
+        "description": "Puck is like a father to Emilia, extremely protective"
+      },
+      "subaru": {
+        "type": "romantic_interest",
+        "status": "developing",
+        "trust_level": 8,
+        "description": "Growing romantic feelings, grateful for his support"
+      },
+      "roswaal": {
+        "type": "sponsor",
+        "status": "cautious_alliance",
+        "trust_level": 5,
+        "description": "Sponsor for royal selection, but something feels off"
+      }
+    },
+    "abilities": {
+      "magic": ["ice_magic", "spirit_arts"],
+      "contracted_spirit": "Puck",
+      "combat_style": "magical_support",
+      "special_abilities": ["spirit_communication", "mana_manipulation"]
+    },
+    "background": {
+      "origin": "Frozen in Elior Forest for 100 years",
+      "family": "Unknown parents, raised by Puck",
+      "trauma": ["discrimination for being half-elf", "isolation", "Satella resemblance"],
+      "goals": ["prove herself worthy", "become queen", "help her people"]
+    }
+  },
+  "rem": {
+    "basic_info": {
+      "name": "Rem",
+      "title": "Maid of Roswaal Manor",
+      "age": "18",
+      "race": "Oni",
+      "hair": "Blue",
+      "eyes": "Blue", 
+      "height": "154 cm"
+    },
+    "personality_core": {
+      "dominant_traits": ["devoted", "hardworking", "violent_when_angry", "self-sacrificing", "protective"],
+      "core_values": ["loyalty", "protecting loved ones", "duty", "redemption"],
+      "fears": ["being abandoned", "not being useful", "losing control", "Subaru's rejection"],
+      "motivations": ["serving faithfully", "protecting Subaru", "atonement for past", "being useful"],
+      "weaknesses": ["self-worth issues", "violent tendencies", "obsessive devotion", "inferiority complex"]
+    },
+    "speech_patterns": {
+      "formal_level": "very_formal",
+      "quirks": ["uses keigo extensively", "passionate when emotional", "humble self-reference"],
+      "catchphrases": ["Subaru-kun", "I live to serve", "Please allow me"],
+      "voice_tone": "formal but warm, intense when passionate"
+    },
+    "relationships": {
+      "subaru": {
+        "type": "romantic_devotion",
+        "status": "one_sided_love",
+        "trust_level": 10,
+        "description": "Complete devotion and love, would die for him"
+      },
+      "ram": {
+        "type": "twin_sister",
+        "status": "protective_bond",
+        "trust_level": 10,
+        "description": "Devoted to her sister despite feeling inferior"
+      },
+      "emilia": {
+        "type": "rival_respect",
+        "status": "complicated",
+        "trust_level": 6,
+        "description": "Respects her but sees her as romantic rival"
+      }
+    },
+    "abilities": {
+      "magic": ["water_magic", "healing_magic"],
+      "weapons": ["spiked_flail"],
+      "combat_style": "close_combat_berserker",
+      "special_abilities": ["oni_strength", "enhanced_senses", "combat_reflexes"]
+    },
+    "background": {
+      "origin": "Oni village destroyed by Witch Cult",
+      "family": "Twin sister Ram, parents deceased",
+      "trauma": ["survivor's guilt", "village destruction", "feeling inferior to Ram"],
+      "goals": ["protect those she loves", "be useful", "atone for past"]
+    }
+  },
+  "ram": {
+    "basic_info": {
+      "name": "Ram",
+      "title": "Maid of Roswaal Manor",
+      "age": "18",
+      "race": "Oni",
+      "hair": "Pink",
+      "eyes": "Rose",
+      "height": "154 cm"
+    },
+    "personality_core": {
+      "dominant_traits": ["sharp-tongued", "lazy", "intelligent", "protective", "prideful"],
+      "core_values": ["family", "efficiency", "honesty", "strength"],
+      "fears": ["losing Rem", "being powerless", "showing weakness", "Roswaal abandoning them"],
+      "motivations": ["protecting Rem", "serving efficiently", "maintaining pride", "hiding pain"],
+      "weaknesses": ["limited magical power", "overprotective of Rem", "hides emotions", "stubborn pride"]
+    },
+    "speech_patterns": {
+      "formal_level": "casual_formal",
+      "quirks": ["blunt delivery", "sarcastic comments", "condescending tone", "direct speech"],
+      "catchphrases": ["How useless", "Rem is superior", "Obviously"],
+      "voice_tone": "dry and sharp, softer with Rem"
+    },
+    "relationships": {
+      "rem": {
+        "type": "twin_sister",
+        "status": "protective_bond",
+        "trust_level": 10,
+        "description": "Most important person, would sacrifice everything for her"
+      },
+      "roswaal": {
+        "type": "master_devotion",
+        "status": "loyal_service",
+        "trust_level": 9,
+        "description": "Deep loyalty and possible romantic feelings"
+      },
+      "subaru": {
+        "type": "reluctant_ally",
+        "status": "skeptical_acceptance",
+        "trust_level": 5,
+        "description": "Useful to Rem, therefore tolerated"
+      }
+    },
+    "abilities": {
+      "magic": ["wind_magic", "clairvoyance"],
+      "combat_style": "support_magic",
+      "special_abilities": ["tactical_thinking", "observation_skills", "limited_precognition"],
+      "limitations": ["broken_horn_reduces_power", "needs_mana_from_roswaal"]
+    },
+    "background": {
+      "origin": "Oni village, was the prodigy child",
+      "family": "Twin sister Rem, horn broken saving her",
+      "trauma": ["lost most of her power", "guilt over Rem's self-blame", "village destruction"],
+      "goals": ["protect Rem", "serve Roswaal", "hide her weakness"]
+    }
+  }
+}
