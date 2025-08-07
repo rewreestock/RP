@@ -7,6 +7,8 @@ const StateManager = require('./core/StateManager');
 const CharacterEngine = require('./core/CharacterEngine');
 const ConversationManager = require('./core/ConversationManager');
 const WebIntegration = require('./core/WebIntegration');
+const ConsequenceTracker = require('./core/ConsequenceTracker');
+const NarrativeController = require('./core/NarrativeController');
 
 class ReZeroRPSystem {
   constructor() {
@@ -16,10 +18,15 @@ class ReZeroRPSystem {
     this.conversationManager = new ConversationManager(this.stateManager, this.characterEngine);
     this.webIntegration = new WebIntegration(this.stateManager);
     
+    // Initialize Phase 2 components - additive only, don't modify existing
+    this.consequenceTracker = new ConsequenceTracker(this.stateManager, this.characterEngine);
+    this.narrativeController = new NarrativeController(this.stateManager, this.characterEngine, this.consequenceTracker);
+    
     this.isRunning = false;
     this.currentSession = null;
     
     console.log('🌟 Re:Zero RP System initialized');
+    console.log('🔧 Phase 2 enhancements: ConsequenceTracker, NarrativeController');
     console.log('📖 Ready to begin your story...\n');
   }
 
@@ -150,6 +157,20 @@ class ReZeroRPSystem {
         console.log('\n📜 Your actions may have consequences...');
       }
 
+      // Process any delayed consequences that are due
+      this.consequenceTracker.processDelayedEvents();
+
+      // Analyze narrative progression and suggest story developments
+      const narrativeAnalysis = this.narrativeController.analyzeStoryProgression();
+      
+      // Show narrative insights if tension is high or story events are suggested
+      if (narrativeAnalysis.currentTension > 6 || narrativeAnalysis.suggestedEvents.length > 0) {
+        console.log(`📈 Story Tension: ${narrativeAnalysis.currentTension}/10`);
+        if (narrativeAnalysis.suggestedEvents.length > 0) {
+          console.log(`💡 Story Opportunity: ${narrativeAnalysis.suggestedEvents[0].title}`);
+        }
+      }
+
       console.log(''); // Add spacing
 
       return {
@@ -224,6 +245,8 @@ class ReZeroRPSystem {
   getSystemStatus() {
     const state = this.stateManager.getState();
     const conversationState = this.conversationManager.getCurrentConversationState();
+    const narrativeStatus = this.narrativeController.getNarrativeStatus();
+    const consequenceStats = this.consequenceTracker.getConsequenceStats();
     
     return {
       isRunning: this.isRunning,
@@ -233,8 +256,90 @@ class ReZeroRPSystem {
       conversationActive: conversationState !== null,
       conversationParticipants: conversationState ? conversationState.participants : [],
       totalInteractions: state.sessionInfo.totalInteractions,
-      memoryUsage: this.getMemoryUsage()
+      memoryUsage: this.getMemoryUsage(),
+      // Phase 2 enhancements
+      storyTension: narrativeStatus.pacingMetrics.tensionLevel,
+      activeStoryArcs: narrativeStatus.activeArcs.map(arc => arc.title),
+      pendingConsequences: consequenceStats.totalActive,
+      narrativeRecommendations: narrativeStatus.recommendedEvents.slice(0, 2)
     };
+  }
+
+  /**
+   * Get detailed narrative analysis
+   */
+  getNarrativeAnalysis() {
+    if (!this.isRunning) {
+      return { error: 'No active session' };
+    }
+
+    const narrativeStatus = this.narrativeController.getNarrativeStatus();
+    const consequenceStats = this.consequenceTracker.getConsequenceStats();
+    
+    return {
+      storyProgression: narrativeStatus.storyProgression,
+      activeArcs: narrativeStatus.activeArcs,
+      characterGrowthOpportunities: narrativeStatus.characterGrowthOpportunities,
+      consequenceBreakdown: consequenceStats.effectTypeBreakdown,
+      pacingMetrics: narrativeStatus.pacingMetrics
+    };
+  }
+
+  /**
+   * Trigger a story event manually
+   */
+  triggerStoryEvent(eventData) {
+    if (!this.isRunning) {
+      throw new Error('No active session');
+    }
+
+    try {
+      const event = this.narrativeController.processStoryEvent(eventData);
+      console.log(`🎭 Story Event: ${event.title}`);
+      
+      return {
+        success: true,
+        event: event,
+        narrativeImpact: this.narrativeController.analyzeStoryProgression()
+      };
+    } catch (error) {
+      console.error('Failed to trigger story event:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Get character relationship analysis
+   */
+  getRelationshipAnalysis(characterId = null) {
+    if (!this.isRunning) {
+      return { error: 'No active session' };
+    }
+
+    const state = this.stateManager.getState();
+    const analysis = {};
+
+    const charactersToAnalyze = characterId ? [characterId] : Object.keys(state.characters);
+
+    for (const charId of charactersToAnalyze) {
+      const character = state.characters[charId];
+      const relationship = this.stateManager.getRelationship(charId);
+      const consequences = this.consequenceTracker.getCharacterConsequences(charId);
+      
+      analysis[charId] = {
+        characterName: character.name,
+        relationshipLevel: this.characterEngine.getCharacterRelationshipStatus(charId).relationshipLevel,
+        affinity: relationship.affinity,
+        trust: relationship.trust,
+        interactions: relationship.interactions,
+        recentConsequences: consequences.slice(-3),
+        emotionalState: character.emotionalState,
+        growthOpportunities: this.narrativeController.identifyCharacterGrowthOpportunities()
+          .filter(opp => opp.characterId === charId)
+      };
+    }
+
+    return analysis;
   }
 
   /**
@@ -297,7 +402,9 @@ class ReZeroRPSystem {
     console.log('💡 Try sending a message! Example: "Hello Emilia, how are you today?"');
     console.log('💡 Other available characters: rem, ram');
     console.log('💡 You can add characters with: system.conversationManager.addParticipant("rem")');
-    console.log('💡 Search for lore with: system.searchLore("royal selection")\n');
+    console.log('💡 Search for lore with: system.searchLore("royal selection")');
+    console.log('💡 Get narrative analysis with: system.getNarrativeAnalysis()');
+    console.log('💡 View relationship details with: system.getRelationshipAnalysis()\n');
     
     return this;
   }
@@ -325,9 +432,23 @@ if (require.main === module) {
     // Search for lore
     await system.searchLore("Emilia half elf");
     
-    // Show system status
-    console.log('📊 System Status:');
-    console.log(JSON.stringify(system.getSystemStatus(), null, 2));
+    // Show enhanced system status with Phase 2 features
+    console.log('📊 Enhanced System Status:');
+    const status = system.getSystemStatus();
+    console.log(`🎭 Story Tension: ${status.storyTension}/10`);
+    console.log(`📚 Active Story Arcs: ${status.activeStoryArcs.join(', ')}`);
+    console.log(`⚡ Pending Consequences: ${status.pendingConsequences}`);
+    if (status.narrativeRecommendations.length > 0) {
+      console.log(`💡 Story Suggestions: ${status.narrativeRecommendations.map(r => r.title).join(', ')}`);
+    }
+    
+    // Show relationship analysis
+    console.log('\n💕 Relationship Analysis:');
+    const relationships = system.getRelationshipAnalysis();
+    for (const charId of Object.keys(relationships)) {
+      const rel = relationships[charId];
+      console.log(`${rel.characterName}: ${rel.relationshipLevel} (Affinity: ${rel.affinity.toFixed(1)}, Trust: ${rel.trust.toFixed(1)})`);
+    }
     
     console.log('\n✨ Demo complete! The system is ready for interactive use.');
   }

@@ -21,6 +21,8 @@ class RPSystemTester {
     await this.testConversationFlow();
     await this.testStateManagement();
     await this.testWebIntegration();
+    await this.testConsequenceTracking();
+    await this.testNarrativeController();
 
     this.printResults();
   }
@@ -35,6 +37,8 @@ class RPSystemTester {
       this.assert(system.characterEngine !== null, 'CharacterEngine should be initialized');
       this.assert(system.conversationManager !== null, 'ConversationManager should be initialized');
       this.assert(system.webIntegration !== null, 'WebIntegration should be initialized');
+      this.assert(system.consequenceTracker !== null, 'ConsequenceTracker should be initialized');
+      this.assert(system.narrativeController !== null, 'NarrativeController should be initialized');
 
       console.log('✅ System initialization tests passed\n');
     } catch (error) {
@@ -176,6 +180,71 @@ class RPSystemTester {
       console.log('✅ Web integration tests passed\n');
     } catch (error) {
       this.fail('Web integration failed', error);
+    }
+  }
+
+  async testConsequenceTracking() {
+    console.log('⚡ Testing Consequence Tracking...');
+
+    try {
+      const system = new ReZeroRPSystem();
+      await system.startSession('TestUser');
+
+      // Test consequence processing
+      const consequence = system.consequenceTracker.processConsequence({
+        type: 'test_consequence',
+        description: 'User made a promise to help Emilia',
+        characterId: 'emilia'
+      });
+
+      this.assert(consequence !== null, 'Consequence should be processed');
+      this.assert(consequence.effects !== null, 'Consequence should have effects');
+
+      // Test consequence retrieval
+      const activeConsequences = system.consequenceTracker.getActiveConsequences();
+      this.assert(activeConsequences.length > 0, 'Should have active consequences');
+
+      // Test character-specific consequences
+      const charConsequences = system.consequenceTracker.getCharacterConsequences('emilia');
+      this.assert(charConsequences.length > 0, 'Should have consequences for character');
+
+      console.log('✅ Consequence tracking tests passed\n');
+    } catch (error) {
+      this.fail('Consequence tracking failed', error);
+    }
+  }
+
+  async testNarrativeController() {
+    console.log('📖 Testing Narrative Controller...');
+
+    try {
+      const system = new ReZeroRPSystem();
+      await system.startSession('TestUser');
+
+      // Test story progression analysis
+      const analysis = system.narrativeController.analyzeStoryProgression();
+      this.assert(analysis !== null, 'Story analysis should be generated');
+      this.assert(analysis.currentTension !== undefined, 'Should calculate tension level');
+      this.assert(analysis.suggestedEvents !== undefined, 'Should suggest story events');
+
+      // Test narrative status
+      const narrativeStatus = system.narrativeController.getNarrativeStatus();
+      this.assert(narrativeStatus !== null, 'Narrative status should be available');
+      this.assert(narrativeStatus.pacingMetrics !== null, 'Should have pacing metrics');
+
+      // Test story arc management
+      const arcs = system.narrativeController.getAllStoryArcs();
+      this.assert(arcs.length > 0, 'Should have initialized story arcs');
+      this.assert(arcs.some(arc => arc.id === 'royal_selection'), 'Should have royal selection arc');
+
+      // Test enhanced system status
+      const enhancedStatus = system.getSystemStatus();
+      this.assert(enhancedStatus.storyTension !== undefined, 'Enhanced status should include story tension');
+      this.assert(enhancedStatus.activeStoryArcs !== undefined, 'Enhanced status should include active arcs');
+
+      console.log('✅ Narrative controller tests passed\n');
+    } catch (error) {
+      this.fail('Narrative controller failed', error);
     }
   }
 
